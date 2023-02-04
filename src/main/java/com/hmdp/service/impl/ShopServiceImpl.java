@@ -15,8 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
-import static com.hmdp.utils.RedisConstants.CACHE_SHOP_KEY;
-import static com.hmdp.utils.RedisConstants.CACHE_SHOP_TTL;
+import static com.hmdp.utils.RedisConstants.*;
 
 /**
  * <p>
@@ -43,10 +42,17 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
 
             return Result.ok(shop);
         }
+        //只有缓存判断命中的是否是空值  "" 的值即为缓存的空值
+        if (shopJson !=null){
+                return Result.fail("店铺信息不存在");
+        }
+
         //4.不存在，根据id查询数据库
         Shop shop=getById(id);
         //5.不存在，返回错误
         if (shop==null){
+            //解决缓存穿透问题，如果有恶意访问不存在的数据
+            stringRedisTemplate.opsForValue().set(key,"",CACHE_NULL_TTL,TimeUnit.MINUTES);
             return  Result.fail("店铺不存在");
         }
 
