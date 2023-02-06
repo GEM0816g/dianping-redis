@@ -42,7 +42,11 @@ public class BlogController {
         // 返回id
         return Result.ok(blog.getId());
     }
+    @GetMapping("/{id}")
+    public Result queryBlog(@PathVariable("id") Long id) {
 
+        return Result.ok(blogService.getById(id));
+    }
     @PutMapping("/like/{id}")
     public Result likeBlog(@PathVariable("id") Long id) {
         // 修改点赞数量
