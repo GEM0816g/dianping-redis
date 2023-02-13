@@ -54,6 +54,14 @@ public class BlogController {
        //         .setSql("liked = liked + 1").eq("id", id).update();
         return Result.ok(blogService.likeBlog(id));
     }
+    //点赞排行榜
+    @GetMapping("/likes/{id}")
+    public Result queryBlogLikes(@PathVariable("id") Long id) {
+        // 修改点赞数量
+        //   blogService.update()
+        //         .setSql("liked = liked + 1").eq("id", id).update();
+        return Result.ok(blogService.queryBlogLikes(id));
+    }
 
     @GetMapping("/of/me")
     public Result queryMyBlog(@RequestParam(value = "current", defaultValue = "1") Integer current) {
