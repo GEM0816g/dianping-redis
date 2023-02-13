@@ -71,6 +71,8 @@ public class Blog implements Serializable {
      */
     private Integer liked;
 
+    @TableField(exist = false)
+    private Boolean isLike;
     /**
      * 评论数量
      */
